@@ -9,6 +9,7 @@ export default {
     chatOpen: false,
     chatNotificationIcon: false,
     chatNotificationPopover: false,
+    profile: null ,
   },
   mutations: {
     toggleSidebar(state) {
@@ -20,6 +21,16 @@ export default {
       if (!nextState && (isScreen('lg') || isScreen('xl'))) {
         state.sidebarClose = true;
       }
+    },
+    getProfile(state,value) {
+      if (value) {
+        state.profile = value;
+      } else {
+        state.profile = null;
+      }
+    },
+    userProfile(state,value) {
+      return this.state.profile
     },
     switchSidebar(state, value) {
       if (value) {
@@ -47,8 +58,14 @@ export default {
     toggleSidebar({ commit }) {
       commit('toggleSidebar');
     },
+    profile({ commit }) {
+      commit('userProfile');
+    },
     switchSidebar({ commit }, value) {
       commit('switchSidebar', value);
+    },
+    getUserProfile({ commit }, value) {
+      commit('getProfile', value);
     },
     handleSwipe({ commit }, e) {
       commit('handleSwipe', e);

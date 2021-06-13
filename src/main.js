@@ -15,6 +15,13 @@ import layoutMixin from './mixins/layout';
 import Widget from './components/Widget/Widget';
 import Calendar from 'v-calendar/lib/components/calendar.umd'
 import DatePicker from 'v-calendar/lib/components/date-picker.umd'
+import Vuesax from 'vuesax'
+
+import 'vuesax/dist/vuesax.css' //Vuesax styles
+
+Vue.use(Vuesax, {
+  // options here
+})
 Vue.use(BootstrapVue);
 Vue.use(VueTouch);
 Vue.use(Trend);

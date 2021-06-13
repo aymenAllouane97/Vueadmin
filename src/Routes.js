@@ -23,6 +23,7 @@ import ChartsPage from '@/pages/Charts/Charts';
 import IconsPage from '@/pages/Icons/Icons';
 import NotificationsPage from '@/pages/Notifications/Notifications';
 import Accident from "./pages/Accidents/Accident";
+import Agents from "./pages/Tables/Agents";
 
 
 Vue.use(Router);
@@ -62,6 +63,21 @@ export default new Router({
         {
           path: 'components/icons',
           name: 'IconsPage',
+          component: IconsPage,
+        },
+        {
+          path: 'callCenter/agents',
+          name: 'Agents',
+          component: Agents,
+        },
+        {
+          path: 'callCenter/hospitals',
+          name: 'Hospitals',
+          component: IconsPage,
+        },
+        {
+          path: 'callCenter/ambulances',
+          name: 'Ambulances',
           component: IconsPage,
         },
         {

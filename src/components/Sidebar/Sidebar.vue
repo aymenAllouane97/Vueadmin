@@ -6,7 +6,7 @@
         @mouseleave="sidebarMouseLeave"
     >
       <header class="logo">
-        <router-link to="/app/dashboard"><span class="primary-word">Sing</span> <span class="secondary-word"> App</span></router-link>
+        <router-link to="/app/dashboard"><span class="primary-word">call center</span> <span class="secondary-word"> App</span></router-link>
       </header>
       <h5 class="navTitle first">
         APP
@@ -63,6 +63,18 @@
               { header: 'Maps', link: '/app/components/maps' },
             ]"
         />
+        <NavLink
+            :activeItem="activeItem"
+            header="Call Center"
+            link="/app/callCenter"
+            iconName="flaticon-network"
+            index="callCenter"
+            :childrenLinks="[
+              { header: 'Agents', link: '/app/callCenter/agents' },
+              { header: 'Hospitals', link: '/app/callCenter/hospitals' },
+              { header: 'Ambulance', link: '/app/callCenter/ambulances' },
+            ]"
+        />
       </ul>
       <h5 class="navTitle">
         LABELS
@@ -111,12 +123,13 @@
 import { mapState, mapActions } from 'vuex';
 import isScreen from '@/core/screenHelper';
 import NavLink from './NavLink/NavLink';
-
+import axios from 'axios';
 export default {
   name: 'Sidebar',
   components: { NavLink },
   data() {
     return {
+      profile:null,
       alerts: [
         {
           id: 0,
@@ -136,11 +149,14 @@ export default {
     };
   },
   methods: {
-    ...mapActions('layout', ['changeSidebarActive', 'switchSidebar']),
+    ...mapActions('layout', ['changeSidebarActive', 'switchSidebar','getUserProfile']),
     setActiveByRoute() {
       const paths = this.$route.fullPath.split('/');
       paths.pop();
       this.changeSidebarActive(paths.join('/'));
+    },
+    getProfileUser(user){
+      this.getProfileUser(user)
     },
     sidebarMouseEnter() {
       if (!this.sidebarStatic && (isScreen('lg') || isScreen('xl'))) {
@@ -156,7 +172,14 @@ export default {
     },
   },
   created() {
+
     this.setActiveByRoute();
+    const token = window.localStorage.getItem('token');
+    const config = {
+      headers: { Authorization: `Bearer ${token}` }
+    };
+    axios.get('http://localhost:4002/user/profile', config).then(res =>{ this.profile =res.data
+      this.getProfileUser(res.data)}).catch(err => console.log(err))
   },
   computed: {
     ...mapState('layout', {

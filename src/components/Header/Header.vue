@@ -48,7 +48,7 @@
           <span class="avatar rounded-circle thumb-sm float-left mr-2">
             <img class="rounded-circle" src="../../assets/people/a7.png" alt="..." />
           </span>
-          <span class="px-2">Philip Smith</span>
+          <span class="px-2">{{profile.name}}</span>
           <span class="ml-1 mr-2 circle text-white fw-bold avatar-badge">9</span>
           <i class='fi flaticon-arrow-down px-2' />
         </template>
@@ -77,14 +77,21 @@
 import { mapState, mapActions } from 'vuex';
 import Notifications from '@/components/Notifications/Notifications';
 
+import axios from "axios";
+
 export default {
   name: 'Header',
   components: { Notifications },
+  data(){
+    return{
+      profile:null
+    }
+  },
   computed: {
     ...mapState('layout', ['sidebarClose', 'sidebarStatic']),
   },
   methods: {
-    ...mapActions('layout', ['toggleSidebar', 'switchSidebar', 'changeSidebarActive']),
+    ...mapActions('layout', ['toggleSidebar', 'switchSidebar', 'changeSidebarActive','getUserProfile']),
     switchSidebarMethod() {
       if (!this.sidebarClose) {
         this.switchSidebar(true);
@@ -95,6 +102,9 @@ export default {
         paths.pop();
         this.changeSidebarActive(paths.join('/'));
       }
+    },
+    getProfileUser(user){
+      this.getProfileUser(user)
     },
     toggleSidebarMethod() {
       if (this.sidebarStatic) {
@@ -111,7 +121,16 @@ export default {
       window.localStorage.setItem('authenticated', false);
       this.$router.push('/login');
     },
+  },
+  created() {
+    const token = window.localStorage.getItem('token');
+    const config = {
+      headers: { Authorization: `Bearer ${token}` }
+    };
+    axios.get('http://localhost:4002/user/profile', config).then(res =>{ this.profile =res.data
+      this.getProfileUser(res.data)}).catch(err => console.log(err))
   }
+
 };
 </script>
 
