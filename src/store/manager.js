@@ -4,7 +4,8 @@ export default {
     namespaced: true,
     state: {
         agents: null,
-        ambulances:null
+        ambulances:null,
+        hospitals:null
     },
     mutations: {
 
@@ -12,14 +13,21 @@ export default {
             if (value) {
                 state.agents = value;
             } else {
-                state.agents = value;
+                state.agents = null;
             }
         },
         setAmbulances(state, value) {
             if (value) {
                 state.ambulances = value;
             } else {
-                state.ambulances = value;
+                state.ambulances = null;
+            }
+        },
+        setHospitals(state, value) {
+            if (value) {
+                state.hospitals = value;
+            } else {
+                state.hospitals = null;
             }
         },
 
@@ -31,6 +39,9 @@ export default {
         ambulancesSet({ commit }, value) {
             commit('setAmbulances', value);
         },
+        hospitalsSet({ commit }, value) {
+            commit('setHospitals', value);
+            },
 
     },
 };
