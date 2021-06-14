@@ -50,14 +50,20 @@ export default {
       const password = this.$refs.password.value;
 
       if (email.length !== 0 && password.length !== 0) {
-        axios.post('http://localhost:4002/login/CallCenterManager',{
+        axios.post('http://localhost:4002/login',{
 
          email,password}).then(
             res => {
               window.localStorage.setItem('token',res.data.token);
+              window.localStorage.setItem('role',res.data.role);
                this.$router.push('/app/dashboard');
             }
-        ).catch(err => console.log('slm'))
+        ).catch(err => {
+          if(err.status = 404){
+            this.errorMessage =err.response.data
+            console.log(err.response)
+          }
+        })
         // this.$router.push('/app/dashboard');
       }
     },

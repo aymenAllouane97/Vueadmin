@@ -1,4 +1,3 @@
-
 <template>
   <div class="center shadow-lg ">
     <div class="center">
@@ -13,7 +12,7 @@
       <vs-dialog v-model="active">
         <template #header>
           <h4 class="not-margin">
-            Add new <b>Agent</b>
+            Add new <b>Ambulance</b>
           </h4>
         </template>
         <form  >
@@ -100,6 +99,49 @@
               </div>
             </vs-col>
           </vs-row>
+          <vs-row justify="center">
+            <vs-col  w="10">
+              <vs-input
+                  class="mb-2"
+                  type="text"
+                  danger-text="The password does not meet the standards"
+                  placeholder="Ambulance ID  "
+                  val-icon-danger="clear"
+                  v-model="agent.matricule"
+                  :class="{ 'form-control is-invalid': submitted && $v.agent.matricule.$error }"
+                  border >
+                <template #icon>
+                  <i class='fa fa-id-card'></i>
+                </template>
+              </vs-input>
+              <div v-if="submitted && $v.agent.matricule.$error" class="invalid-feedback">
+                <span v-if="!$v.agent.matricule.required"> Ambulance ID is required</span>
+                <span v-else-if="!$v.agent.matricule.minLength">Ambulance ID must 6 chars</span>
+              </div>
+            </vs-col>
+          </vs-row>
+
+          <vs-row justify="center">
+            <vs-col  w="10">
+              <vs-input
+                  class="mb-2"
+                  danger-text="The password does not meet the standards"
+                  placeholder="Phone Number "
+                  val-icon-danger="clear"
+                  v-model="agent.phoneNumber"
+                  :class="{ 'form-control is-invalid': submitted && $v.agent.phoneNumber.$error }"
+                  border>
+                <template #icon>
+                  <i class='fa fa-phone'></i>
+                </template>
+              </vs-input>
+              <div v-if="submitted && $v.agent.phoneNumber.$error" class="invalid-feedback">
+                <span v-if="!$v.agent.phoneNumber.required"> Phone number is required</span>
+                <span v-else-if="!$v.agent.phoneNumber.minLength">Phone number must 8 chars</span>
+              </div>
+            </vs-col>
+          </vs-row>
+
 
         </form>
 
@@ -108,9 +150,9 @@
           <div class="footer-dialog">
             <vs-row>
               <vs-col offset="2" w="8">
-            <vs-button block @click="submit()">
-              <i class='fa fa-plus mr-1' ></i> Add
-            </vs-button>
+                <vs-button block @click="submit()">
+                  <i class='fa fa-plus mr-1' ></i> Add
+                </vs-button>
               </vs-col>
             </vs-row>
           </div>
@@ -127,30 +169,30 @@
         <vs-tr>
           <vs-th>
             <vs-checkbox
-                :indeterminate="selected.length == users.length" v-model="allCheck"
-                @change="selected = $vs.checkAll(selected, users)"
+                :indeterminate="selected.length == ambulances.length" v-model="allCheck"
+                @change="selected = $vs.checkAll(selected, ambulances)"
             />
           </vs-th>
-          <vs-th sort @click="agents = $vs.sortData($event ,agents, '_id')">
+          <vs-th sort @click="ambulances = $vs.sortData($event ,ambulances, '_id')">
             Id
-          </vs-th>
-          <vs-th>
-            image
           </vs-th>
           <vs-th >
             Name
+          </vs-th>
+          <vs-th>
+            Type
           </vs-th>
           <vs-th >
             Email
           </vs-th>
           <vs-th >
-           Birthday
+            Call Center
           </vs-th>
           <vs-th >
             Phone number
           </vs-th>
           <vs-th >
-            Address
+            Matricule
           </vs-th>
           <vs-th>
             Action
@@ -160,7 +202,7 @@
       <template #tbody>
         <vs-tr
             :key="i"
-            v-for="(tr, i) in $vs.getPage($vs.getSearch(agents, search), page, max)"
+            v-for="(tr, i) in $vs.getPage($vs.getSearch(ambulances, search), page, max)"
             :data="tr"
             :is-selected="!!selected.includes(tr)"
             not-click-selected
@@ -170,35 +212,30 @@
             <vs-checkbox :val="tr" v-model="selected" />
           </vs-td>
           <vs-td >
-            {{ tr.user._id }}
+            {{ tr._id }}
           </vs-td>
           <vs-td>
-            <vs-avatar>
-              <img :src="`http://localhost:4002/avatars/avatar.png`" alt="">
-            </vs-avatar>
+            {{ tr.name }}
           </vs-td>
           <vs-td>
-            {{ tr.user.name }}
+            {{ tr.ambulanceType }}
           </vs-td>
           <vs-td>
-            {{ tr.user.email }}
+            {{ tr.email }}
           </vs-td>
           <vs-td>
-            {{ tr.user.birthday }}
+            {{ tr.callCenterID }}
           </vs-td>
           <vs-td>
-            {{ tr.user.phoneNumber }}
+            {{ tr.phoneNumber }}
           </vs-td>
           <vs-td>
-            {{ tr.user.address }}
+            {{ tr.matricule }}
           </vs-td>
           <vs-td>
             <vs-row>
-              <vs-button flat icon>
-                Grant to manager
-              </vs-button>
               <vs-button border danger>
-                Remove User
+                Remove Ambulance
               </vs-button>
             </vs-row>
 
@@ -207,60 +244,33 @@
         </vs-tr>
       </template>
       <template #footer>
-        <vs-pagination v-model="page" :length="$vs.getLength($vs.getSearch(users, search), max)" />
+        <vs-pagination v-model="page" :length="$vs.getLength($vs.getSearch(ambulances, search), max)" />
       </template>
     </vs-table>
 
-    <vs-dialog v-model="editActive">
-      <template #header>
-        Change Prop {{ editProp }}
-      </template>
-      <vs-input @keypress.enter="editActive = false" v-if="editProp == 'email'" v-model="edit[editProp]" />
-      <vs-select @change="editActive = false" block v-if="editProp == 'name'" placeholder="Select" v-model="edit[editProp]">
-        <vs-option label="Vuesax" value="Vuesax">
-          Vuesax
-        </vs-option>
-        <vs-option label="Vue" value="Vuejs">
-          Vue
-        </vs-option>
-        <vs-option label="Javascript" value="Javascript">
-          Javascript
-        </vs-option>
-        <vs-option disabled label="Sass" value="Sass">
-          Sass
-        </vs-option>
-        <vs-option label="Typescript" value="Typescript">
-          Typescript
-        </vs-option>
-        <vs-option label="Webpack" value="Webpack">
-          Webpack
-        </vs-option>
-        <vs-option label="Nodejs" value="Nodejs">
-          Nodejs
-        </vs-option>
-      </vs-select>
-    </vs-dialog>
+
   </div>
 </template>
-
 <script>
 import { required,minLength,sameAs,email } from 'vuelidate/lib/validators'
 import { mapState, mapActions } from 'vuex';
 import axios from "axios";
 export default {
-  name: "Agents",
+  name: "Ambulances",
   components:{
 
   },
 
   data:() => ({
     errorMessage:null,
-    agents:null,
+    ambulances:null,
     agent:{
       name:'',
       email:'',
       password:'',
       confirmPassword:'',
+      phoneNumber:'',
+      matricule:''
     },
     submitted: false,
     email: '',
@@ -282,13 +292,13 @@ export default {
     const config = {
       headers: { Authorization: `Bearer ${token}` }
     };
-    axios.get('http://localhost:4002/agents', config).then(res =>{ this.agents =res.data
-      this.agentStore(res.data)}).catch(err => console.log(err))
+    axios.get('http://localhost:4002/ambulances', config).then(res =>{ this.ambulances =res.data
+      this.ambulanceStore(res.data)}).catch(err => console.log(err))
   },
   methods:{
-    ...mapActions('manager', ['agentsSet']),
-    agentStore(agents){
-     this.agentsSet(agents)
+    ...mapActions('manager', ['ambulancesSet']),
+    ambulanceStore(ambulances){
+      this.ambulancesSet(ambulances)
     },
     submit() {
       console.log('submit!')
@@ -302,25 +312,26 @@ export default {
       const token = window.localStorage.getItem('token');
       const config = {
         headers: { Authorization: `Bearer ${token}` },
-        body:{name:this.agent.name,email:this.agent.email,password:this.agent.password}
+        body:{name:this.agent.name,email:this.agent.email,password:this.agent.password,phoneNumber:this.agent.phoneNumber,matricule:this.agent.matricule}
       };
 
-      axios.post('http://localhost:4002/register/agent', config).then(res =>{
+      axios.post('http://localhost:4002/register/Ambulance', config).then(res =>{
         this.$vs.notification({
           progress: 'auto',
           color:'success',
           position:'top-right',
-          title: 'agent',
-          text: `agent created successfully`
+          title: 'Call center',
+          text: `Ambulance created successfully`
         })
-       setTimeout(function (){
-         window.location.reload();
-       },3000)
+        console.log(res)
+        setTimeout(function (){
+          window.location.reload();
+        },3000)
       })
           .catch(err => {if(err.status = 404){
-        this.errorMessage =err.response.data
-        }
-      })
+            this.errorMessage =err.response.data
+          }
+          })
 
     },
   },
@@ -330,12 +341,20 @@ export default {
         required,
         minLength: minLength(2)
       },
+      phoneNumber: {
+        required,
+        minLength: minLength(8)
+      },
       email: {
         required,email
       },
       password: {
         required,
         minLength: minLength(8)
+      },
+      matricule:{
+        required,
+        minLength: minLength(6)
       },
       confirmPassword: {
         required,
@@ -363,50 +382,3 @@ export default {
   border-color: #CC3333;
 }
 </style>
-
-<!--<style lang="stylus" scoped>-->
-<!--getColor(vsColor, alpha = 1)-->
-<!--unquote("rgba(var(&#45;&#45;vs-"+vsColor+"), "+alpha+")")-->
-<!--getVar(var)-->
-<!--unquote("var(&#45;&#45;vs-"+var+")")-->
-<!--.not-margin-->
-<!--  margin 0px-->
-<!--  font-weight normal-->
-<!--  padding 10px-->
-<!--.con-form-->
-<!--  width 100%-->
-<!--  .flex-->
-<!--    display flex-->
-<!--    align-items center-->
-<!--    justify-content space-between-->
-<!--    a-->
-<!--      font-size .8rem-->
-<!--      opacity .7-->
-<!--      &:hover-->
-<!--        opacity 1-->
-<!--  .vs-checkbox-label-->
-<!--    font-size .8rem-->
-<!--  .vs-input-content-->
-<!--    margin 10px 0px-->
-<!--    width calc(100%)-->
-<!--    .vs-input-->
-<!--      width 100%-->
-<!--.footer-dialog-->
-<!--  display flex-->
-<!--  align-items center-->
-<!--  justify-content center-->
-<!--  flex-direction column-->
-<!--  width calc(100%)-->
-<!--  .new-->
-<!--    margin 0px-->
-<!--    margin-top 20px-->
-<!--    padding: 0px-->
-<!--    font-size .7rem-->
-<!--    a-->
-<!--      color getColor('primary') !important-->
-<!--      margin-left 6px-->
-<!--      &:hover-->
-<!--        text-decoration underline-->
-<!--  .vs-button-->
-<!--    margin 0px-->
-<!--</style>-->

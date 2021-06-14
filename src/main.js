@@ -18,7 +18,8 @@ import DatePicker from 'v-calendar/lib/components/date-picker.umd'
 import Vuesax from 'vuesax'
 
 import 'vuesax/dist/vuesax.css' //Vuesax styles
-
+import Vuelidate from 'vuelidate'
+Vue.use(Vuelidate)
 Vue.use(Vuesax, {
   // options here
 })

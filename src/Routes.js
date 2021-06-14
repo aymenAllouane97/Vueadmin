@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-
+import auth from './middlewares/auth';
 import Layout from '@/components/Layout/Layout';
 import Login from '@/pages/Login/Login';
 import ErrorPage from '@/pages/Error/Error';
@@ -24,10 +24,29 @@ import IconsPage from '@/pages/Icons/Icons';
 import NotificationsPage from '@/pages/Notifications/Notifications';
 import Accident from "./pages/Accidents/Accident";
 import Agents from "./pages/Tables/Agents";
-
+import Ambulances from "./pages/Tables/Ambulances";
+import Hospitals from "./pages/Tables/Hospitals";
 
 Vue.use(Router);
+function guardMyroute(to, from, next)
+{
+  var isAuthenticated= false;
+//this is just an example. You will have to find a better or
+// centralised way to handle you localstorage data handling
+  if(localStorage.getItem('token'))
 
+    isAuthenticated = true;
+  else
+    isAuthenticated= false;
+  if(isAuthenticated)
+  {
+    next(); // allow to enter route
+  }
+  else
+  {
+    next('/login'); // go to '/login';
+  }
+}
 export default new Router({
   routes: [
     {
@@ -49,11 +68,13 @@ export default new Router({
           path: 'dashboard',
           name: 'AnalyticsPage',
           component: AnalyticsPage,
+          beforeEnter : guardMyroute,
         },
         {
           path: 'accidents',
           name: 'AccidentPage',
           component: Accident,
+
         },
         {
           path: 'typography',
@@ -69,16 +90,19 @@ export default new Router({
           path: 'callCenter/agents',
           name: 'Agents',
           component: Agents,
+          beforeEnter : guardMyroute,
         },
         {
           path: 'callCenter/hospitals',
           name: 'Hospitals',
-          component: IconsPage,
+          component: Hospitals,
+        beforeEnter : guardMyroute,
         },
         {
           path: 'callCenter/ambulances',
           name: 'Ambulances',
-          component: IconsPage,
+          component: Ambulances,
+          beforeEnter : guardMyroute,
         },
         {
           path: 'notifications',
