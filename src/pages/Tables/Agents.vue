@@ -127,8 +127,8 @@
         <vs-tr>
           <vs-th>
             <vs-checkbox
-                :indeterminate="selected.length == users.length" v-model="allCheck"
-                @change="selected = $vs.checkAll(selected, users)"
+                :indeterminate="selected.length == agents.length" v-model="allCheck"
+                @change="selected = $vs.checkAll(selected, agents)"
             />
           </vs-th>
           <vs-th sort @click="agents = $vs.sortData($event ,agents, '_id')">
@@ -207,7 +207,7 @@
         </vs-tr>
       </template>
       <template #footer>
-        <vs-pagination v-model="page" :length="$vs.getLength($vs.getSearch(users, search), max)" />
+        <vs-pagination v-model="page" :length="$vs.getLength($vs.getSearch(agents, search), max)" />
       </template>
     </vs-table>
 

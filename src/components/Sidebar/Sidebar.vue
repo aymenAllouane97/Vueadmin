@@ -16,7 +16,7 @@
             :activeItem="activeItem"
             header="Dashboard"
             link="/app/dashboard"
-            iconName="flaticon-home"
+            iconName="fa fa-home"
             index="dashboard"
             isHeader
         />
@@ -24,7 +24,7 @@
             :activeItem="activeItem"
             header="Typography"
             link="/app/typography"
-            iconName="flaticon-list"
+            iconName="fa-list"
             index="typography"
             isHeader
         />
@@ -32,7 +32,7 @@
             :activeItem="activeItem"
             header="Tables Basic"
             link="/app/tables"
-            iconName="flaticon-equal-1"
+            iconName="fa-equal-1"
             index="tables"
             isHeader
         />
@@ -40,14 +40,21 @@
             :activeItem="activeItem"
             header="Accidents"
             link="/app/accidents"
-            iconName="flaticon-home"
+            iconName="fa-exclamation-triangle"
             index="accidents"
+            isHeader
+        /><NavLink
+            :activeItem="activeItem"
+            header="Hospitals"
+            link="/app/hospitals/track"
+            iconName="fa-hospital-o"
+            index="hospitalsTrack"
             isHeader
         /><NavLink
             :activeItem="activeItem"
             header="Notifications"
             link="/app/notifications"
-            iconName="flaticon-bell"
+            iconName="fa-bell"
             index="notifications"
             isHeader
         />
@@ -55,7 +62,7 @@
             :activeItem="activeItem"
             header="Components"
             link="/app/components"
-            iconName="flaticon-network"
+            iconName="fa-network"
             index="components"
             :childrenLinks="[
               { header: 'Charts', link: '/app/components/charts' },
@@ -67,7 +74,7 @@
             :activeItem="activeItem"
             header="Call Center"
             link="/app/callCenter"
-            iconName="flaticon-network"
+            iconName="fa-volume-control-phone"
             index="callCenter"
             :childrenLinks="[
               { header: 'Agents', link: '/app/callCenter/agents' },

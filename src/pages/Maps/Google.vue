@@ -11,11 +11,11 @@
       >
       <GmapMarker
           :key="index"
-          v-for="(m, index) in markers"
+          v-for="(m, index) in items"
           :position="m"
           @click="center=m"
           :label=label
-          :icon="m.markerOptions"
+          :icon="markerOptions"
       />
 <!--        :position="{lat: -37.813179, lng: 144.950259}"-->
 
@@ -28,12 +28,19 @@
 import image  from './../../assets/label_icon.svg';
 export default {
   name: 'GoogleMap',
+  props:['items'],
   data(){
     return {
     label:{text:'232548466',color:'red' ,fontWeight: "bold"},
       center:{
         lat: 36.35,
         lng: 6.6,
+      },
+      markerOptions: {
+        url: image,
+        size: {width: 90, height: 90, f: 'px', b: 'px',},
+        scaledSize: {width: 90, height: 45, f: 'px', b: 'px',},
+        labelOrigin: new google.maps.Point(45, 20),
       },
       markers : [
         {

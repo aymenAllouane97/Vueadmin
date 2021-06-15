@@ -292,8 +292,10 @@ export default {
     const config = {
       headers: { Authorization: `Bearer ${token}` }
     };
+    console.log('sllm')
     axios.get('http://localhost:4002/ambulances', config).then(res =>{ this.ambulances =res.data
-      this.ambulanceStore(res.data)}).catch(err => console.log(err))
+      this.ambulanceStore(res.data)
+    }).catch(err => console.log(err))
   },
   methods:{
     ...mapActions('manager', ['ambulancesSet']),
