@@ -13,12 +13,12 @@
 
 
                     <div class="accordion shadow" v-for="item in items" :key="item.message" role="tablist">
-                      <b-card no-body class="mb-1 ">
+                      <b-card no-body class="mb-2 ">
                         <b-card-header header-tag="header" class="p-1" role="tab">
                           <div class='row p-2'>
                             <div class='col-3 pr-1' >
                               <p style='margin-bottom: 0.1rem;font-size: 11px;' class='text-secondary'>
-                                Name  <i class='l-1 fa fa-id-card-o ' aria-hidden='true'></i>
+                                <i class='mr-1 fa fa-user ' aria-hidden='true'></i> Name
                               </p>
                               <p class=' h6'>
                                 {{item.name}}
@@ -26,7 +26,7 @@
                             </div>
                             <div class='col-3 pr-1' >
                               <p style='margin-bottom: 0.1rem;font-size: 11px;' class='text-secondary'>
-                                Phone <i class='l-1 fa fa-phone ' aria-hidden='true'></i>
+                                <i class='mr-1 fa fa-phone ' aria-hidden='true'></i>   Phone
                               </p>
                               <p class=' h6'>
                                 {{item.phoneNumber}}
@@ -34,7 +34,7 @@
                             </div>
                             <div class='col-3' >
                               <p style='margin-bottom: 0.1rem;font-size: 11px;' class='text-secondary'>
-                                Location <i class='l-1 fa fa-map-marker ' aria-hidden='true'></i>
+                                <i class='mr-1 fa fa-map-marker ' aria-hidden='true'></i> Location
                               </p>
                               <p class=' h6'>
                                 {{item.latitude}}/{{item.longitude}}
@@ -49,8 +49,33 @@
                         </b-card-header>
                         <b-collapse :id="'accordion-'+item.latitude" accordion="my-accordion" role="tabpanel">
                           <b-card-body>
-                            <b-card-text>I start opened because <code>visible</code> is <code>true</code></b-card-text>
-                            <b-card-text>{{ text }}</b-card-text>
+                            <div class='row p-2'>
+                              <div class='col-4 pr-1' >
+                                <p style='margin-bottom: 0.1rem;font-size: 11px;' class='text-secondary'>
+                                  <i class='mr-1 fa fa-id-card-o ' aria-hidden='true'></i>    Address
+                                </p>
+                                <p class=' h6'>
+                                  {{item.address}}
+                                </p>
+                              </div>
+                              <div class='col-5 pr-1' >
+                                <p style='margin-bottom: 0.1rem;font-size: 11px;' class='text-secondary'>
+                                  <i class='mr-1 fa fa-envelope ' aria-hidden='true'></i> Email
+                                </p>
+                                <p class=' h6'>
+                                  {{item.email}}
+                                </p>
+                              </div>
+                              <div class='col-3 pl-0 pr-0' >
+                                <p style='margin-bottom: 0.1rem;font-size: 11px;' class='text-secondary'>
+                                  <i class=' fa fa-cube ' aria-hidden='true'></i> Blocks
+                                </p>
+                                <p class=' h6'>
+                                  {{item.Blocks.length}}
+                                </p>
+                              </div>
+
+                            </div>
                           </b-card-body>
                         </b-collapse>
                       </b-card>
@@ -66,8 +91,34 @@
 
         </div>
         <div class="col-8 flex-grow-1 flex-fill">
-          <GoogleMap items=items>
-          </GoogleMap>
+          <template>
+            <div>
+              <h1 class="mapTitle page-title">
+                Google <span class="fw-semi-bold">Maps</span>
+              </h1>
+              <div class="mapContainer" v-if="show">
+
+                <GmapMap
+                    :center="center"
+                    :zoom="14"
+                    style="width: 100%; height: inherit"
+                    v-for="(m, index) in coordinates"
+                >
+                  <GmapMarker
+                      :key="index"
+
+                      :position="m"
+                      @click="center=m"
+                      :label=label
+                      :icon="m.markerOptions"
+                  />
+                  <!--        :position="{lat: -37.813179, lng: 144.950259}"-->
+
+                </GmapMap>
+              </div>
+            </div>
+          </template>
+
         </div>
       </div>
     </div>
@@ -82,6 +133,7 @@ import GoogleMap from './../Maps/Google'
 import Calendar from 'v-calendar/lib/components/calendar.umd'
 import DatePicker from 'v-calendar/lib/components/date-picker.umd'
 import Item from '../Accidents/Item'
+import image  from './../../assets/label_icon.svg';
 import axios from "axios";
 
 export default {
@@ -94,7 +146,14 @@ export default {
   },
   data() {
     return {
+      label:{text:'232548466',color:'red' ,fontWeight: "bold"},
+      coordinates:null,
       selectedDate: null,
+      show:false,
+      center:{
+        lat: 36.35,
+        lng: 6.6,
+      },
       parentMessage: 'Parent',
       items: null,
       text: 'Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry\n' +
@@ -108,8 +167,34 @@ export default {
 
 
     }
-  }
-  ,created(){
+  },
+  // ,created(){
+  //   const token = window.localStorage.getItem('token');
+  //   const config = {
+  //     headers: { Authorization: `Bearer ${token}` }
+  //   };
+  //   axios.get('http://localhost:4002/Hospitals', config).then(res =>{
+  //     console.log(res.data)
+  //     this.items =res.data
+  //     var pos=[];
+  //     console.log(this.items)
+  //     for(var i=0;i<=this.items.length-1;i++){
+  //
+  //       pos.push({lat:parseInt(this.items[i].latitude)
+  //         ,lng:parseInt(this.items[i].longitude),label: 'Ahmedabad',
+  //         markerOptions: {
+  //           url: image,
+  //           size: {width: 90, height: 90, f: 'px', b: 'px',},
+  //           scaledSize: {width: 90, height: 45, f: 'px', b: 'px',},
+  //           labelOrigin: new google.maps.Point(45, 20),}})
+  //     }
+  //     console.log(pos)
+  //     this.coordinates = pos;
+  //     this.show =true;
+  //     this.hospitalsStore(res.data)
+  //   }).catch(err => console.log(err))
+  // },
+  beforeMount: function () {
     const token = window.localStorage.getItem('token');
     const config = {
       headers: { Authorization: `Bearer ${token}` }
@@ -117,15 +202,38 @@ export default {
     axios.get('http://localhost:4002/Hospitals', config).then(res =>{
       console.log(res.data)
       this.items =res.data
+      var pos=[];
+      console.log(this.items)
+      for(var i=0;i<=this.items.length-1;i++){
+
+        pos.push({lat:parseInt(this.items[i].latitude)
+          ,lng:parseInt(this.items[i].longitude),label: 'Ahmedabad',
+          markerOptions: {
+            url: image,
+            size: {width: 90, height: 90, f: 'px', b: 'px',},
+            scaledSize: {width: 90, height: 45, f: 'px', b: 'px',},
+            labelOrigin: new google.maps.Point(45, 20),}})
+      }
+      console.log(pos)
+      this.coordinates = pos;
+      this.show =true;
       this.hospitalsStore(res.data)
     }).catch(err => console.log(err))
-  },
-
+  }
 
 }
 </script>
 
 <style lang="css" scoped>
+.row {
+  display: table;
+}
+
+[class*="col-"] {
+  float: none;
+  display: table-cell;
+  vertical-align: top;
+}
 .card{
   border: none;
 }
