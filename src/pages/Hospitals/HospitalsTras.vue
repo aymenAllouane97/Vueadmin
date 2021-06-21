@@ -66,8 +66,10 @@
 
         </div>
         <div class="col-8 flex-grow-1 flex-fill">
-          <GoogleMap items=items>
+          <template v-if="renderComponent">
+          <GoogleMap v-bind:items="items">
           </GoogleMap>
+          </template>
         </div>
       </div>
     </div>
@@ -94,6 +96,8 @@ export default {
   },
   data() {
     return {
+      renderComponent: true,
+      dataShow:false,
       selectedDate: null,
       parentMessage: 'Parent',
       items: null,
@@ -118,8 +122,20 @@ export default {
       console.log(res.data)
       this.items =res.data
       this.hospitalsStore(res.data)
+      this.dataShow=true;
     }).catch(err => console.log(err))
   },
+  methods: {
+    forceRerender () {
+      // remove the my-component component from the DOM
+      this.renderComponent = false;
+
+      this. $nextTick (() => {
+        // add my-component component in DOM
+        this.renderComponent = true;
+      });
+    }
+  }
 
 
 }

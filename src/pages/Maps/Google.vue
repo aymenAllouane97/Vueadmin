@@ -12,9 +12,9 @@
       <GmapMarker
           :key="index"
           v-for="(m, index) in items"
-          :position="m"
-          @click="center=m"
-          :label=label
+          :position="new google.maps.LatLng(m.latitude, m.longitude)"
+          @click="center=new google.maps.LatLng(m.latitude, m.longitude)"
+          :label=items[0].name
           :icon="markerOptions"
       />
 <!--        :position="{lat: -37.813179, lng: 144.950259}"-->
@@ -26,6 +26,7 @@
 
 <script>
 import image  from './../../assets/label_icon.svg';
+import {gmapApi} from 'vue2-google-maps'
 export default {
   name: 'GoogleMap',
   props:['items'],
@@ -78,7 +79,12 @@ export default {
         }
       ]
     }
-  }
+  },
+  computed: {
+    google: gmapApi
+  },
+
+
 };
 </script>
 
