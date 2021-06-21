@@ -20,22 +20,8 @@
             index="dashboard"
             isHeader
         />
-        <NavLink
-            :activeItem="activeItem"
-            header="Typography"
-            link="/app/typography"
-            iconName="fa-list"
-            index="typography"
-            isHeader
-        />
-        <NavLink
-            :activeItem="activeItem"
-            header="Tables Basic"
-            link="/app/tables"
-            iconName="fa-equal-1"
-            index="tables"
-            isHeader
-        />
+
+
         <NavLink
             :activeItem="activeItem"
             header="Accidents"
@@ -45,31 +31,20 @@
             isHeader
         /><NavLink
             :activeItem="activeItem"
+            header="Ambulances"
+            link="/app/ambulances/track"
+            iconName="fa-ambulance"
+            index="ambulancesTrack"
+            isHeader
+        /><NavLink
+            :activeItem="activeItem"
             header="Hospitals"
             link="/app/hospitals/track"
             iconName="fa-hospital-o"
             index="hospitalsTrack"
             isHeader
-        /><NavLink
-            :activeItem="activeItem"
-            header="Notifications"
-            link="/app/notifications"
-            iconName="fa-bell"
-            index="notifications"
-            isHeader
         />
-        <NavLink
-            :activeItem="activeItem"
-            header="Components"
-            link="/app/components"
-            iconName="fa-network"
-            index="components"
-            :childrenLinks="[
-              { header: 'Charts', link: '/app/components/charts' },
-              { header: 'Icons', link: '/app/components/icons' },
-              { header: 'Maps', link: '/app/components/maps' },
-            ]"
-        />
+
         <NavLink
             :activeItem="activeItem"
             header="Call Center"
@@ -83,45 +58,6 @@
             ]"
         />
       </ul>
-      <h5 class="navTitle">
-        LABELS
-      </h5>
-      <ul class="sidebarLabels">
-        <li>
-          <a href="#">
-            <i class="fa fa-circle text-danger"/>
-            <span class="labelName">Core</span>
-          </a>
-        </li>
-        <li>
-          <a href="#">
-            <i class="fa fa-circle text-primary"/>
-            <span class="labelName">UI Elements</span>
-          </a>
-        </li>
-        <li>
-          <a href="#">
-            <i class="fa fa-circle text-success"/>
-            <span class="labelName">Forms</span>
-          </a>
-        </li>
-      </ul>
-      <h5 class="navTitle">
-        PROJECTS
-      </h5>
-      <div class="sidebarAlerts">
-        <b-alert
-            v-for="alert in alerts"
-            :key="alert.id"
-            class="sidebarAlert" variant="transparent"
-            show dismissible
-        >
-          <span>{{alert.title}}</span><br/>
-          <b-progress class="sidebarProgress progress-xs mt-1"
-                      :variant="alert.color" :value="alert.value" :max="100"/>
-          <small>{{alert.footer}}</small>
-        </b-alert>
-      </div>
     </nav>
   </div>
 </template>

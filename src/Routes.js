@@ -27,6 +27,7 @@ import Agents from "./pages/Tables/Agents";
 import Ambulances from "./pages/Tables/Ambulances";
 import Hospitals from "./pages/Tables/Hospitals";
 import HospitalsTras from "./pages/Hospitals/HospitalsTras";
+import AmbulanceTras from "./pages/Ambulance/AmbulanceTras.vue";
 Vue.use(Router);
 function guardMyroute(to, from, next)
 {
@@ -80,6 +81,12 @@ export default new Router({
           path: 'hospitals/track',
           name: 'HospitalsTrackPage',
           component: HospitalsTras,
+
+        },
+        {
+          path: 'ambulances/track',
+          name: 'AmbulancessTrackPage',
+          component: AmbulanceTras,
 
         },
         {

@@ -293,7 +293,9 @@ export default {
       headers: { Authorization: `Bearer ${token}` }
     };
     console.log('sllm')
-    axios.get('http://localhost:4002/ambulances', config).then(res =>{ this.ambulances =res.data
+    axios.get('http://localhost:4002/ambulances', config).then(res =>{
+      this.ambulances =res.data
+      console.log(res.data)
       this.ambulanceStore(res.data)
     }).catch(err => console.log(err))
   },

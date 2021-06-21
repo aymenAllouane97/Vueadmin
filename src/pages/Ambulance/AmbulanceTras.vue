@@ -12,73 +12,65 @@
                 <section class="col-12">
 
 
-                    <div class="accordion shadow" v-for="item in items" :key="item.message" role="tablist">
-                      <b-card no-body class="mb-1 ">
-                        <b-card-header header-tag="header" class="p-1" role="tab">
-                          <div class='row p-2'>
-                            <div class='col-3 pr-1' >
-                              <p style='margin-bottom: 0.1rem;font-size: 11px;' class='text-secondary'>
-                                <i class='r-1 fa fa-user ' aria-hidden='true'></i> Name
-                              </p>
-                              <p class=' h6'>
-                                {{item.name}}
-                              </p>
-                            </div>
-                            <div class='col-3 pr-1' >
-                              <p style='margin-bottom: 0.1rem;font-size: 11px;' class='text-secondary'>
-                                <i class='r-1 fa fa-phone ' aria-hidden='true'></i> Phone
-                              </p>
-                              <p class=' h6'>
-                                {{item.phoneNumber}}
-                              </p>
-                            </div>
-                            <div class='col-3' >
-                              <p style='margin-bottom: 0.1rem;font-size: 11px;' class='text-secondary'>
-                                <i class='r-1 fa fa-map-marker ' aria-hidden='true'></i> Location
-                              </p>
-                              <p class=' h6'>
-                                {{item.latitude}}/{{item.longitude}}
-                              </p>
-                            </div>
-                            <div class="col-3">
-
-                              <b-button size="sm"  v-b-toggle="'accordion-'+ item.latitude" class="btn-col" variant="light"><i class="fa fa-chevron-down"></i></b-button>
-                            </div>
+                  <div class="accordion shadow" v-for="item in items" :key="item.message" role="tablist">
+                    <b-card no-body class="mb-1 ">
+                      <b-card-header header-tag="header" class="p-1" role="tab">
+                        <div class='row p-2'>
+                          <div class='col-3 pr-1' >
+                            <p style='margin-bottom: 0.1rem;font-size: 11px;' class='text-secondary'>
+                              <i class='r-1 fa fa-user ' aria-hidden='true'></i> Name
+                            </p>
+                            <p class=' h6'>
+                              {{item.name}}
+                            </p>
                           </div>
+                          <div class='col-3 pr-1' >
+                            <p style='margin-bottom: 0.1rem;font-size: 11px;' class='text-secondary'>
+                              <i class='r-1 fa fa-phone ' aria-hidden='true'></i> Phone
+                            </p>
+                            <p class=' h6'>
+                              {{item.phoneNumber}}
+                            </p>
+                          </div>
+                          <div class='col-3' >
+                            <p style='margin-bottom: 0.1rem;font-size: 11px;' class='text-secondary'>
+                              <i class='r-1 fa fa-map-marker ' aria-hidden='true'></i> Location
+                            </p>
+                            <p class=' h6'>
+                              {{item.latitude}}/{{item.longitude}}
+                            </p>
+                          </div>
+                          <div class="col-3">
 
-                        </b-card-header>
-                        <b-collapse :id="'accordion-'+item.latitude" accordion="my-accordion" role="tabpanel">
-                          <b-card-body>
-                            <div class='row p-2'>
-                              <div class='col-4 pr-1' >
-                                <p style='margin-bottom: 0.1rem;font-size: 11px;' class='text-secondary'>
-                                  <i class='r-1 fa fa-id-card-o ' aria-hidden='true'></i> Address
-                                </p>
-                                <p class=' h6'>
-                                  {{item.address}}
-                                </p>
-                              </div>
-                              <div class='col-5 pr-1' >
-                                <p style='margin-bottom: 0.1rem;font-size: 11px;' class='text-secondary'>
-                                  <i class='r-1 fa fa-envelope ' aria-hidden='true'></i> email
-                                </p>
-                                <p class=' h6'>
-                                  {{item.email}}
-                                </p>
-                              </div>
-                              <div class='col-3' >
-                                <p style='margin-bottom: 0.1rem;font-size: 11px;' class='text-secondary'>
-                                  <i class='l-1 fa fa-cube ' aria-hidden='true'></i> Blocks
-                                </p>
-                                <p class=' h6'>
-                                  {{item.Blocks.length}}
-                                </p>
-                              </div>
+                            <b-button size="sm"  v-b-toggle="'accordion-'+ item.latitude" class="btn-col" variant="light"><i class="fa fa-chevron-down"></i></b-button>
+                          </div>
+                        </div>
+
+                      </b-card-header>
+                      <b-collapse :id="'accordion-'+item.latitude" accordion="my-accordion" role="tabpanel">
+                        <b-card-body>
+                          <div class='row p-2'>
+                            <div class='col-7 pr-1' >
+                              <p style='margin-bottom: 0.1rem;font-size: 11px;' class='text-secondary'>
+                                <i class='r-1 fa fa-envelope ' aria-hidden='true'></i> email
+                              </p>
+                              <p class=' h6'>
+                                {{item.email}}
+                              </p>
                             </div>
-                          </b-card-body>
-                        </b-collapse>
-                      </b-card>
-                    </div>
+                            <div class='col-5 pr-1' >
+                              <p style='margin-bottom: 0.1rem;font-size: 11px;' class='text-secondary'>
+                                <i class='r-1 fa fa-id-card-o ' aria-hidden='true'></i> ambulance id
+                              </p>
+                              <p class=' h6'>
+                                {{item.matricule}}
+                              </p>
+                            </div>
+                            </div>
+                        </b-card-body>
+                      </b-collapse>
+                    </b-card>
+                  </div>
 
 
 
@@ -91,8 +83,8 @@
         </div>
         <div class="col-8 flex-grow-1 flex-fill " style="height: 70vh">
           <template v-if="renderComponent">
-          <GoogleMap v-bind:items="items">
-          </GoogleMap>
+            <GoogleMap v-bind:items="items">
+            </GoogleMap>
           </template>
         </div>
       </div>
@@ -111,7 +103,7 @@ import Item from '../Accidents/Item'
 import axios from "axios";
 
 export default {
-  name: "HospitalsTrs",
+  name: "AmbulanceTras",
   components: {
     GoogleMap,
     Item,
@@ -142,7 +134,7 @@ export default {
     const config = {
       headers: { Authorization: `Bearer ${token}` }
     };
-    axios.get('http://localhost:4002/Hospitals', config).then(res =>{
+    axios.get('http://localhost:4002/ambulances', config).then(res =>{
       console.log(res.data)
       this.items =res.data
       this.hospitalsStore(res.data)
