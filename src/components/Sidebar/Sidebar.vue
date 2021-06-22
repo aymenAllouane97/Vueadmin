@@ -6,7 +6,8 @@
         @mouseleave="sidebarMouseLeave"
     >
       <header class="logo">
-        <router-link to="/app/dashboard"><span class="primary-word">call center</span> <span class="secondary-word"> App</span></router-link>
+        <router-link v-if="role == 'manager'" to="/app/dashboard"><span class="primary-word"> Manager</span> <span class="secondary-word"> App</span></router-link>
+        <router-link v-if="role == 'agent'" to="/app/dashboard"><span class="primary-word"> Agent</span> <span class="secondary-word"> App</span></router-link>
       </header>
       <h5 class="navTitle first">
         APP
@@ -46,6 +47,7 @@
         />
 
         <NavLink
+            v-if="role == 'manager'"
             :activeItem="activeItem"
             header="Call Center"
             link="/app/callCenter"
@@ -92,15 +94,13 @@ export default {
     };
   },
   methods: {
-    ...mapActions('layout', ['changeSidebarActive', 'switchSidebar','getUserProfile']),
+    ...mapActions('layout', ['changeSidebarActive', 'switchSidebar']),
     setActiveByRoute() {
       const paths = this.$route.fullPath.split('/');
       paths.pop();
       this.changeSidebarActive(paths.join('/'));
     },
-    getProfileUser(user){
-      this.getProfileUser(user)
-    },
+
     sidebarMouseEnter() {
       if (!this.sidebarStatic && (isScreen('lg') || isScreen('xl'))) {
         this.switchSidebar(false);
@@ -117,18 +117,14 @@ export default {
   created() {
 
     this.setActiveByRoute();
-    const token = window.localStorage.getItem('token');
-    const config = {
-      headers: { Authorization: `Bearer ${token}` }
-    };
-    axios.get('http://localhost:4002/user/profile', config).then(res =>{ this.profile =res.data
-      this.getProfileUser(res.data)}).catch(err => console.log(err))
+
   },
   computed: {
     ...mapState('layout', {
       sidebarStatic: state => state.sidebarStatic,
       sidebarOpened: state => !state.sidebarClose,
       activeItem: state => state.sidebarActiveElement,
+      role: state => state.role
     }),
   },
 };

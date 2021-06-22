@@ -10,6 +10,7 @@ export default {
     chatNotificationIcon: false,
     chatNotificationPopover: false,
     profile: null ,
+    role:null
   },
   mutations: {
     toggleSidebar(state) {
@@ -27,6 +28,13 @@ export default {
         state.profile = value;
       } else {
         state.profile = null;
+      }
+    },
+    getRole(state,value) {
+      if (value) {
+        state.role = value;
+      } else {
+        state.role = null;
       }
     },
     userProfile(state,value) {
@@ -66,6 +74,9 @@ export default {
     },
     getUserProfile({ commit }, value) {
       commit('getProfile', value);
+    },
+    getUserRole({ commit }, value) {
+      commit('getRole', value);
     },
     handleSwipe({ commit }, e) {
       commit('handleSwipe', e);

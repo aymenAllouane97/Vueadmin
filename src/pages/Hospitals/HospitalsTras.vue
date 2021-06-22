@@ -137,12 +137,12 @@ export default {
 
     }
   }
-  ,created(){
+  ,async created(){
     const token = window.localStorage.getItem('token');
     const config = {
       headers: { Authorization: `Bearer ${token}` }
     };
-    axios.get('http://localhost:4002/Hospitals', config).then(res =>{
+    await axios.get('http://localhost:4002/Hospitals', config).then(res =>{
       console.log(res.data)
       this.items =res.data
       this.hospitalsStore(res.data)

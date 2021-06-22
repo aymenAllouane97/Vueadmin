@@ -88,10 +88,10 @@ export default {
     }
   },
   computed: {
-    ...mapState('layout', ['sidebarClose', 'sidebarStatic']),
+    ...mapState('layout', ['sidebarClose', 'sidebarStatic','role']),
   },
   methods: {
-    ...mapActions('layout', ['toggleSidebar', 'switchSidebar', 'changeSidebarActive','getUserProfile']),
+    ...mapActions('layout', ['toggleSidebar', 'switchSidebar', 'changeSidebarActive','getUserProfile','getUserRole']),
     switchSidebarMethod() {
       if (!this.sidebarClose) {
         this.switchSidebar(true);
@@ -104,7 +104,10 @@ export default {
       }
     },
     getProfileUser(user){
-      this.getProfileUser(user)
+      this.getUserProfile(user)
+    },
+    getRoleUser(role){
+      this.getUserRole(role)
     },
     toggleSidebarMethod() {
       if (this.sidebarStatic) {
@@ -118,7 +121,8 @@ export default {
       }
     },
     logout() {
-      window.localStorage.setItem('authenticated', false);
+      window.localStorage.removeItem('token');
+      window.localStorage.removeItem('role');
       this.$router.push('/login');
     },
   },
@@ -127,8 +131,11 @@ export default {
     const config = {
       headers: { Authorization: `Bearer ${token}` }
     };
-    axios.get('http://localhost:4002/user/profile', config).then(res =>{ this.profile =res.data
-      this.getProfileUser(res.data)}).catch(err => console.log(err))
+    axios.get('http://localhost:4002/user/profile', config).then(res =>{ this.profile =res.data.user
+      this.getProfileUser(res.data.user)
+      this.getRoleUser(res.data.role)
+      console.log(res.data.role)
+    }).catch(err => console.log(err))
   }
 
 };
