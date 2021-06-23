@@ -116,7 +116,7 @@
           <vs-td>
             <vs-row>
               <vs-button border danger>
-                Remove Region
+                Remove
               </vs-button>
             </vs-row>
 
