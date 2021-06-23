@@ -46,7 +46,7 @@
         right>
         <template slot="button-content">
           <span class="avatar rounded-circle thumb-sm float-left mr-2">
-            <img class="rounded-circle" src="../../assets/people/a7.png" alt="..." />
+            <img class="rounded-circle" :src="profile.image" :alt="profile.name" />
           </span>
           <span class="px-2">{{profile.name}}</span>
           <span class="ml-1 mr-2 circle text-white fw-bold avatar-badge">9</span>
@@ -135,7 +135,11 @@ export default {
       this.getProfileUser(res.data.user)
       this.getRoleUser(res.data.role)
       console.log(res.data.role)
-    }).catch(err => console.log(err))
+    }).catch(err => {console.log(err)
+      // window.localStorage.removeItem('token');
+      // window.localStorage.removeItem('role');
+      // this.$router.push('/login');
+    })
   }
 
 };

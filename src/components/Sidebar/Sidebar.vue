@@ -8,6 +8,7 @@
       <header class="logo">
         <router-link v-if="role == 'manager'" to="/app/dashboard"><span class="primary-word"> Manager</span> <span class="secondary-word"> App</span></router-link>
         <router-link v-if="role == 'agent'" to="/app/dashboard"><span class="primary-word"> Agent</span> <span class="secondary-word"> App</span></router-link>
+        <router-link v-if="role == 'admin'" to="/app/dashboard"><span class="primary-word"> Admin</span> <span class="secondary-word"> App</span></router-link>
       </header>
       <h5 class="navTitle first">
         APP
@@ -25,6 +26,7 @@
 
         <NavLink
             :activeItem="activeItem"
+            v-if="role != 'admin'"
             header="Accidents"
             link="/app/accidents"
             iconName="fa-exclamation-triangle"
@@ -32,12 +34,47 @@
             isHeader
         /><NavLink
             :activeItem="activeItem"
+            v-if="role == 'admin'"
+            header="Regions"
+            link="/admin/regions"
+            iconName="fa-compass"
+            index="regions"
+            isHeader
+        /><NavLink
+            :activeItem="activeItem"
+            v-if="role == 'admin'"
+            header="Call Centers"
+            link="/admin/callCenters"
+            iconName="fa-phone"
+            index="call centers"
+            isHeader
+        /><NavLink
+            :activeItem="activeItem"
+            v-if="role == 'admin'"
+            header="Managers"
+            link="/admin/managers"
+            iconName="fa-tasks"
+            index="managers"
+            isHeader
+        /><NavLink
+            :activeItem="activeItem"
+            v-if="role == 'admin'"
+            header="Users"
+            link="/admin/users"
+            iconName="fa-users"
+            index="users"
+            isHeader
+        />
+        <NavLink
+          v-if="role != 'admin'"
+            :activeItem="activeItem"
             header="Ambulances"
             link="/app/ambulances/track"
             iconName="fa-ambulance"
             index="ambulancesTrack"
             isHeader
         /><NavLink
+          v-if="role != 'admin'"
             :activeItem="activeItem"
             header="Hospitals"
             link="/app/hospitals/track"
@@ -60,6 +97,46 @@
             ]"
         />
       </ul>
+      <h5 class="navTitle">
+        LABELS
+      </h5>
+      <ul class="sidebarLabels">
+        <li>
+          <a href="#">
+            <i class="fa fa-circle text-danger"/>
+            <span class="labelName">Core</span>
+          </a>
+        </li>
+        <li>
+          <a href="#">
+            <i class="fa fa-circle text-primary"/>
+            <span class="labelName">UI Elements</span>
+          </a>
+        </li>
+        <li>
+          <a href="#">
+            <i class="fa fa-circle text-success"/>
+            <span class="labelName">Forms</span>
+          </a>
+        </li>
+      </ul>
+      <h5 class="navTitle">
+        PROJECTS
+      </h5>
+      <div class="sidebarAlerts">
+        <b-alert
+            v-for="alert in alerts"
+            :key="alert.id"
+            class="sidebarAlert" variant="transparent"
+            show dismissible
+        >
+          <span>{{alert.title}}</span><br/>
+          <b-progress class="sidebarProgress progress-xs mt-1"
+                      :variant="alert.color" :value="alert.value" :max="100"/>
+          <small>{{alert.footer}}</small>
+        </b-alert>
+      </div>
+
     </nav>
   </div>
 </template>

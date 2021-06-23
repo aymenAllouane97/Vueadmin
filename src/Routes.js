@@ -3,6 +3,7 @@ import Router from 'vue-router';
 import auth from './middlewares/auth';
 import Layout from '@/components/Layout/Layout';
 import Login from '@/pages/Login/Login';
+import Admin from '@/pages/Login/Admin';
 import ErrorPage from '@/pages/Error/Error';
 // Core
 import TypographyPage from '@/pages/Typography/Typography';
@@ -26,6 +27,10 @@ import Accident from "./pages/Accidents/Accident";
 import Agents from "./pages/Tables/Agents";
 import Ambulances from "./pages/Tables/Ambulances";
 import Hospitals from "./pages/Tables/Hospitals";
+import Region from "./pages/Tables/Region";
+import Manager from "./pages/Tables/Manager";
+import Users from "./pages/Tables/Users";
+import CallCenter from "./pages/Tables/CallCenter";
 import HospitalsTras from "./pages/Hospitals/HospitalsTras";
 import AmbulanceTras from "./pages/Ambulance/AmbulanceTras.vue";
 Vue.use(Router);
@@ -56,9 +61,50 @@ export default new Router({
       component: Login,
     },
     {
+      path: '/login/admin',
+      name: 'loginAdmin',
+      component: Admin,
+    },
+    {
       path: '/error',
       name: 'Error',
       component: ErrorPage,
+    },
+    {
+      path:'/admin',
+      name:'AdminLayout',
+      component:Layout,
+      children:[
+        {
+          path: 'dashboard',
+          name: 'AnalyticsPage',
+          component: AnalyticsPage,
+          beforeEnter : guardMyroute,
+        },
+        {
+          path: 'regions',
+          name: 'RegionsPage',
+          component: Region,
+          beforeEnter : guardMyroute,
+        },
+        {
+          path: 'callCenters',
+          name: 'CallCentersPage',
+          component: CallCenter,
+          beforeEnter : guardMyroute,
+        },
+        {
+          path: 'managers',
+          name: 'ManagersPage',
+          component: Manager,
+          beforeEnter : guardMyroute,
+        },{
+          path: 'users',
+          name: 'UsersPage',
+          component: Users,
+          beforeEnter : guardMyroute,
+        },
+      ]
     },
     {
       path: '/app',
@@ -75,18 +121,20 @@ export default new Router({
           path: 'accidents',
           name: 'AccidentPage',
           component: Accident,
-
+          beforeEnter : guardMyroute,
         },
         {
           path: 'hospitals/track',
           name: 'HospitalsTrackPage',
           component: HospitalsTras,
+          beforeEnter : guardMyroute,
 
         },
         {
           path: 'ambulances/track',
           name: 'AmbulancessTrackPage',
           component: AmbulanceTras,
+          beforeEnter : guardMyroute,
 
         },
         {

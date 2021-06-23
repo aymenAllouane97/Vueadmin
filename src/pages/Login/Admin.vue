@@ -3,14 +3,14 @@
     <b-container>
       <h5 class="auth-logo">
         <i class="fa fa-circle text-primary"></i>
-        EMS APP
+        EMS Admin APP
         <i class="fa fa-circle text-danger"></i>
       </h5>
       <Widget class="widget-auth mx-auto" title="<h3 class='mt-0'>Login to your Web App</h3>" customHeader>
         <p class="widget-auth-info">
-            Use your email to sign in.
+          Use your email to sign in.
         </p>
-        <form class="mt" v-if="this.$route.name == 'Login'" @submit.prevent="login">
+        <form class="mt" @submit.prevent="login">
           <b-alert class="alert-sm" variant="danger" :show="!!errorMessage">
             {{errorMessage}}
           </b-alert>
@@ -37,7 +37,7 @@ import Widget from '@/components/Widget/Widget';
 import axios from 'axios'
 
 export default {
-  name: 'LoginPage',
+  name: 'AdminPage',
   components: { Widget },
   data() {
     return {
@@ -50,13 +50,13 @@ export default {
       const password = this.$refs.password.value;
 
       if (email.length !== 0 && password.length !== 0) {
-        axios.post('http://localhost:4002/login',{
+        axios.post('http://localhost:4002/login/admin',{
 
-         email,password}).then(
+          email,password}).then(
             res => {
               window.localStorage.setItem('token',res.data.token);
               window.localStorage.setItem('role',res.data.role);
-               this.$router.push('/app/dashboard');
+              this.$router.push('/admin/dashboard');
             }
         ).catch(err => {
           if(err.status = 404){
@@ -75,3 +75,7 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+
+</style>
