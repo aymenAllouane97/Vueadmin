@@ -38,10 +38,19 @@
           </vs-row>
           <vs-row justify="center">
             <vs-col w="10">
-              <multiselect v-model="Selected" :options="wilayas"></multiselect>
-              <div v-if="submitted && $v.agent.email.$error" class="invalid-feedback">
-                <span v-if="!$v.agent.email.required">Email is required</span>
-                <span v-if="!$v.agent.email.email">Email is invalid</span>
+              <vue-multi-select
+                  v-model="Selected"
+                  :options="options"
+                  :filters="filters"
+                  :btnLabel="btnLabel"
+                  search
+                  :class="{ 'form-control is-invalid': submitted && $v.Selected.$error }"
+                  historyButton
+                  :searchPlaceholder="Search"
+                  :selectOptions="wilayas" />
+              <div v-if="submitted && $v.Selected.$error" class="invalid-feedback">
+                <span v-if="!$v.Selected.required">Wilayas is required</span>
+
               </div>
             </vs-col>
           </vs-row>
@@ -68,7 +77,7 @@
         v-model="selected"
     >
       <template #header>
-        <vs-input v-model="search" border placeholder="Search" />
+        <vs-input v-model="search1" border placeholder="Search" />
       </template>
       <template #thead>
         <vs-tr>
@@ -95,7 +104,7 @@
       <template #tbody>
         <vs-tr
             :key="i"
-            v-for="(tr, i) in $vs.getPage($vs.getSearch(regions, search), page, max)"
+            v-for="(tr, i) in $vs.getPage($vs.getSearch(regions, search1), page, max)"
             :data="tr"
             :is-selected="!!selected.includes(tr)"
             not-click-selected
@@ -108,10 +117,13 @@
             {{ tr._id }}
           </vs-td>
           <vs-td>
-            {{ tr.name }}
+            {{ tr.regionName }}
           </vs-td>
-          <vs-td>
-            {{ tr.wilayas }}
+          <vs-td class="d-flex pt-4">
+            <div v-for="wilaya in tr.wilayas" :key="index">
+              {{ wilaya }} ,
+            </div>
+
           </vs-td>
           <vs-td>
             <vs-row>
@@ -125,7 +137,7 @@
         </vs-tr>
       </template>
       <template #footer>
-        <vs-pagination v-model="page" :length="$vs.getLength($vs.getSearch(regions, search), max)" />
+        <vs-pagination v-model="page" :length="$vs.getLength($vs.getSearch(regions, search1), max)" />
       </template>
     </vs-table>
 
@@ -134,14 +146,19 @@
 </template>
 <script>
 import { required,minLength,sameAs,email } from 'vuelidate/lib/validators'
-import Multiselect from 'vue-multiselect'
+import vueMultiSelect from 'vue-multi-select';
+import 'vue-multi-select/dist/lib/vue-multi-select.css';
+
 import { mapState, mapActions } from 'vuex';
 import axios from "axios";
 export default {
   name: "Regions",
-  components: { Multiselect },
+  components: { vueMultiSelect, },
 
   data:() => ({
+    search: 'Search things',
+    search1:'',
+    btnLabel: values => `Selected wilayas (${values.length})`,
     errorMessage:null,
     regions:null,
     agent:{
@@ -159,13 +176,27 @@ export default {
     editActive: false,
     edit: null,
     editProp: {},
-    search: '',
     allCheck: false,
     page: 1,
     max: 5,
     active: 0,
     selected: [],
-
+    filters: [{
+      nameAll: 'select <= 5',
+      nameNotAll: 'Deselect <= 5',
+      func(elem) {
+        return elem.name <= 5;
+      },
+    }, {
+      nameAll: 'Select contains 2',
+      nameNotAll: 'Deselect contains 2',
+      func(elem) {
+        return elem.name.indexOf('2') !== -1;
+      },
+    }],
+    options: {
+      multi: true,
+    },
   }),
   created(){
     const token = window.localStorage.getItem('token');
@@ -175,7 +206,9 @@ export default {
     console.log('sllm')
     axios.get('http://localhost:4002/Regions', config).then(res =>{
       this.regions =res.data.regions
-      this.wilayas= res.data.wilayas
+      res.data.wilayas.forEach(element =>{
+        this.wilayas.push({name:element.name,id:element.id})
+      })
       console.log(res.data)
       //this.regions(res.data)
     }).catch(err => console.log(err))
@@ -187,31 +220,37 @@ export default {
     },
     submit() {
       console.log('submit!')
+      console.log(this.Selected)
+      var SendedWilayas =[]
+      this.Selected.forEach(element =>{
+        SendedWilayas.push(element.id)
+      })
+      console.log(SendedWilayas)
       this.submitted = true;
 
       // stop here if form is invalid
-      this.$v.$touch();
-      if (this.$v.$invalid) {
-        return;
-      }
+      // this.$v.$touch();
+      // if (this.$v.$invalid) {
+      //   return;
+      // }
       const token = window.localStorage.getItem('token');
       const config = {
         headers: { Authorization: `Bearer ${token}` },
-        body:{name:this.agent.name,email:this.agent.email,password:this.agent.password,phoneNumber:this.agent.phoneNumber,matricule:this.agent.matricule}
+        body:{regionName:this.agent.name,wilayas:SendedWilayas}
       };
 
-      axios.post('http://localhost:4002/register/Ambulance', config).then(res =>{
+      axios.post('http://localhost:4002/Region/Store', config).then(res =>{
         this.$vs.notification({
           progress: 'auto',
           color:'success',
           position:'top-right',
-          title: 'Call center',
-          text: `Ambulance created successfully`
+          title: 'Admin',
+          text: `Region created successfully`
         })
         console.log(res)
-        setTimeout(function (){
-          window.location.reload();
-        },3000)
+        // setTimeout(function (){
+        //   window.location.reload();
+        // },3000)
       })
           .catch(err => {if(err.status = 404){
             this.errorMessage =err.response.data
@@ -221,6 +260,9 @@ export default {
     },
   },
   validations: {
+    Selected: {
+      required
+    },
     agent:{
       name: {
         required,

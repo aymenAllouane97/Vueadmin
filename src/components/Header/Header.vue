@@ -131,7 +131,9 @@ export default {
     const config = {
       headers: { Authorization: `Bearer ${token}` }
     };
-    axios.get('http://localhost:4002/user/profile', config).then(res =>{ this.profile =res.data.user
+    axios.get('http://localhost:4002/user/profile', config).then(res =>{
+      console.log(res.data)
+      this.profile =res.data.user
       this.getProfileUser(res.data.user)
       this.getRoleUser(res.data.role)
       console.log(res.data.role)

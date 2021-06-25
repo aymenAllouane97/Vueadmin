@@ -2067,6 +2067,11 @@
   "resolved" "https://registry.npmjs.org/builtins/-/builtins-1.0.3.tgz"
   "version" "1.0.3"
 
+"bulma@^0.9.2":
+  "integrity" "sha512-e14EF+3VSZ488yL/lJH0tR8mFWiEQVCMi/BQUMi2TGMBOk+zrDg4wryuwm/+dRSHJw0gMawp2tsW7X1JYUCE3A=="
+  "resolved" "https://registry.npmjs.org/bulma/-/bulma-0.9.2.tgz"
+  "version" "0.9.2"
+
 "bytes@3.0.0":
   "integrity" "sha1-0ygVQE1olpn4Wk6k+odV3ROpYEg="
   "resolved" "https://registry.npmjs.org/bytes/-/bytes-3.0.0.tgz"
@@ -9800,6 +9805,18 @@
     "html-webpack-plugin" "^3.2.0"
     "tb-skeleton" "^0.3.5"
     "vue" "^2.6.10"
+
+"vue-multi-select@^4.6.0":
+  "integrity" "sha512-9NlTUsjIKvvn+93Ud9RUhJv/YHXcbSPuLkgF+s6JAy+YHMymEzEnnA+tdffF+wLSlgQlZ/sguIlykfrh9V6WOQ=="
+  "resolved" "https://registry.npmjs.org/vue-multi-select/-/vue-multi-select-4.6.0.tgz"
+  "version" "4.6.0"
+  dependencies:
+    "vue" "^2.6.10"
+
+"vue-multiselect@^2.1.6":
+  "integrity" "sha512-s7jmZPlm9FeueJg1RwJtnE9KNPtME/7C8uRWSfp9/yEN4M8XcS/d+bddoyVwVnvFyRh9msFo0HWeW0vTL8Qv+w=="
+  "resolved" "https://registry.npmjs.org/vue-multiselect/-/vue-multiselect-2.1.6.tgz"
+  "version" "2.1.6"
 
 "vue-router@^3.3.4", "vue-router@^3.4.9":
   "integrity" "sha512-RRQNLT8Mzr8z7eL4p7BtKvRaTSGdCbTy2+Mm5HTJvLGYSSeG9gDzNasJPP/yOYKLy+/cLG/ftrqq5fvkFwBJEw=="
