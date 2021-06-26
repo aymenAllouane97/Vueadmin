@@ -34,7 +34,7 @@ Vue.component('date-picker', DatePicker)
 
 Vue.use(VueGoogleMaps, {
   load: {
-    key: 'AIzaSyB7OXmzfQYua_1LEhRdqsoYzyJOPh9hGLg',
+    key: 'AIzaSyABZl6RjtFW_tQHVO5MP2qcKqnmMXaD6xI',
   },
 });
 Vue.component('apexchart', VueApexCharts);

@@ -9,75 +9,14 @@
             flat
 
         >
-          <i class='fa fa-plus mr-1' ></i> Add Call Center
+          <i class='fa fa-plus mr-1' ></i> Add Manager
         </vs-button>
 
-        <vs-dialog v-model="active2">
-          <template #header>
-            <h4 class="not-margin">
-              Add new <b>Service</b>
-            </h4>
-          </template>
-          <form  >
-            <b-alert class="alert-sm" variant="danger" :show="!!errorMessage">
-              {{errorMessage}}
-            </b-alert>
-            <vs-row justify="center">
-              <vs-col  w="10">
-                <vs-input
-                    class="mb-2"
-                    danger-text="The name is required"
-                    placeholder="Name"
-                    val-icon-success="done"
-                    v-model="block.name"
-                    :class="{ 'form-control is-invalid': submitted2 && $v.block.name.$error }"
-                    border >
-                  <template #icon>
-                    <i class='fa fa-user'></i>
-                  </template>
-                </vs-input>
-                <div v-if="submitted2 && !$v.block.name.required" class="invalid-feedback">Name is required</div>
-                <div v-if="submitted2 && !$v.block.name.minLength" class="invalid-feedback">Name is must have 4 chars</div>
-              </vs-col>
-            </vs-row>
-            <vs-row justify="center">
-              <vs-col  w="10">
-                <vs-input
-                    class="mb-2"
-                    type="number"
-                    danger-text="The password does not meet the standards"
-                    placeholder="Capacity "
-                    val-icon-danger="clear"
-                    v-model="block.capacity"
-                    :class="{ 'form-control is-invalid': submitted2 && $v.block.capacity.$error }"
-                    border>
-                  <template #icon>
-                    <i class='fa fa-bar-chart'></i>
-                  </template>
-                </vs-input>
-                <div v-if="submitted2 && $v.block.capacity.$error" class="invalid-feedback">
-                  <span v-if="!$v.block.capacity.required"> Capacity is required</span>
 
-                </div>
-              </vs-col>
-            </vs-row>
-          </form>
-          <template #footer>
-            <div class="footer-dialog">
-              <vs-row>
-                <vs-col offset="2" w="8">
-                  <vs-button block @click="storeBlock( )">
-                    <i class='fa fa-plus mr-1' ></i> Add
-                  </vs-button>
-                </vs-col>
-              </vs-row>
-            </div>
-          </template>
-        </vs-dialog>
         <vs-dialog v-model="active">
           <template #header>
             <h4 class="not-margin">
-              Add new <b>Call Center</b>
+              Add new <b>Call center manger</b>
             </h4>
           </template>
           <form  >
@@ -126,20 +65,20 @@
               <vs-col  w="10">
                 <vs-input
                     class="mb-2"
-                    type="number"
+                    type="password"
                     danger-text="The password does not meet the standards"
-                    placeholder="Latitude "
+                    placeholder="Password "
                     val-icon-danger="clear"
-                    v-model="agent.latitude"
-                    :class="{ 'form-control is-invalid': submitted && $v.agent.latitude.$error }"
+                    v-model="agent.password"
+                    :class="{ 'form-control is-invalid': submitted && $v.agent.password.$error }"
                     border>
                   <template #icon>
-                    <i class='fa fa-map-marker'></i>
+                    <i class='fa fa-lock'></i>
                   </template>
                 </vs-input>
-                <div v-if="submitted && $v.agent.latitude.$error" class="invalid-feedback">
-                  <span v-if="!$v.agent.latitude.required"> Latitude is required</span>
-
+                <div v-if="submitted && $v.agent.password.$error" class="invalid-feedback">
+                  <span v-if="!$v.agent.password.required"> Password is required</span>
+                  <span v-else-if="!$v.agent.password.minLength">Passwords must 8 chars</span>
                 </div>
               </vs-col>
             </vs-row>
@@ -147,26 +86,27 @@
               <vs-col  w="10">
                 <vs-input
                     class="mb-2"
-                    type="number"
+                    type="password"
                     danger-text="The password does not meet the standards"
-                    placeholder=" longitude "
+                    placeholder="Confirm password "
                     val-icon-danger="clear"
-                    :class="{ 'form-control is-invalid': submitted && $v.agent.longitude.$error }"
-                    v-model="agent.longitude"
+                    :class="{ 'form-control is-invalid': submitted && $v.agent.confirmPassword.$error }"
+                    v-model="agent.confirmPassword"
                     border>
                   <template #icon>
-                    <i class='fa fa-map-marker'></i>
+                    <i class='fa fa-lock'></i>
                   </template>
                 </vs-input>
-                <div v-if="submitted && $v.agent.longitude.$error" class="invalid-feedback">
-                  <span v-if="!$v.agent.longitude.required">Longitude is required</span>
+                <div v-if="submitted && $v.agent.confirmPassword.$error" class="invalid-feedback">
+                  <span v-if="!$v.agent.confirmPassword.required">Confirm Password is required</span>
+                  <span v-else-if="!$v.agent.confirmPassword.sameAsPassword">Passwords must match</span>
                 </div>
               </vs-col>
             </vs-row>
             <vs-row justify="center">
               <vs-col  w="10">
                 <vs-input
-                    class="mb-2"
+                    class="mb-2 w-100"
                     type="text"
                     danger-text="The password does not meet the standards"
                     placeholder=" Address  "
@@ -184,7 +124,19 @@
                 </div>
               </vs-col>
             </vs-row>
-
+            <vs-row justify="center">
+              <vs-col w="10">
+                <vue-multi-select
+                    v-model="Selected"
+                    :options="options"
+                    :filters="filters"
+                    :btnLabel="btnLabel"
+                    search
+                     historyButton
+                    :searchPlaceholder="search1"
+                    :selectOptions="callCenters" />
+              </vs-col>
+            </vs-row>
             <vs-row justify="center">
               <vs-col  w="10">
                 <vs-input
@@ -222,17 +174,8 @@
             </div>
           </template>
         </vs-dialog>
-        <vs-button border v-if="selected" danger>
-          Remove Call Center
-        </vs-button>
-        <vs-button  v-if="selected1"
-                    primary
-                    flat
-        >
-          <i class='fa fa-pencil-square mr-1' ></i>Edit Block
-        </vs-button>
-        <vs-button border v-if="selected1" danger>
-          Remove Block
+        <vs-button border v-if="selected.length != 0" @click="remove()" danger>
+          Remove Manager
         </vs-button>
       </vs-row>
 
@@ -248,23 +191,21 @@
           <vs-tr>
             <vs-th>
               <vs-checkbox
-
+                  :indeterminate="selected.length == managers.length" v-model="allCheck"
+                  @change="selected = $vs.checkAll(selected, managers)"
               />
             </vs-th>
-            <vs-th sort @click="callCenters = $vs.sortData($event ,callCenters, '_id')">
+            <vs-th sort @click="managers = $vs.sortData($event ,managers, '_id')">
               Id
+            </vs-th>
+            <vs-th>
+              Image
             </vs-th>
             <vs-th >
               Name
             </vs-th>
             <vs-th >
               Email
-            </vs-th>
-            <vs-th>
-              Latitude
-            </vs-th>
-            <vs-th>
-              Longitude
             </vs-th>
             <vs-th >
               Call Center
@@ -275,17 +216,15 @@
             <vs-th >
               Address
             </vs-th>
-            <vs-th>
-              Action
-            </vs-th>
           </vs-tr>
         </template>
         <template #tbody>
           <vs-tr
               :key="i"
-              v-for="(tr, i) in $vs.getPage($vs.getSearch(callCenters, search), page, max)"
+              v-for="(tr, i) in $vs.getPage($vs.getSearch(managers, search), page, max)"
               :data="tr"
-              :is-selected="selected == tr"
+
+              :is-selected="!!selected.includes(tr)"
               not-click-selected
               open-expand-only-td
           >
@@ -293,28 +232,27 @@
               <vs-checkbox :val="tr" v-model="selected" />
             </vs-td>
             <vs-td >
-              {{ tr._id }}
+              {{ tr.manager._id }}
             </vs-td>
             <vs-td>
-              {{ tr.name }}
+              <vs-avatar>
+                <img :src="tr.manager.user.image" :alt="tr.name">
+              </vs-avatar>
             </vs-td>
             <vs-td>
-              {{ tr.email }}
+              {{ tr.manager.user.name }}
             </vs-td>
             <vs-td>
-              {{ tr.latitude }}
+              {{ tr.manager.user.email }}
             </vs-td>
             <vs-td>
-              {{ tr.longitude }}
+              {{ tr.callCenter.name }}
             </vs-td>
             <vs-td>
-              {{ tr.region.regionName }}
+              {{ tr.manager.user.phoneNumber }}
             </vs-td>
             <vs-td>
-              {{ tr.phoneNumber }}
-            </vs-td>
-            <vs-td>
-              {{ tr.address }}
+              {{ tr.manager.user.address }}
             </vs-td>
 
 
@@ -322,7 +260,7 @@
           </vs-tr>
         </template>
         <template #footer>
-          <vs-pagination v-model="page" :length="$vs.getLength($vs.getSearch(callCenters, search), max)" />
+          <vs-pagination v-model="page" :length="$vs.getLength($vs.getSearch(managers, search), max)" />
         </template>
       </vs-table>
     </div>
@@ -332,29 +270,29 @@
 </template>
 <script>
 import { required,minLength,sameAs,email } from 'vuelidate/lib/validators'
+import vueMultiSelect from 'vue-multi-select';
+import 'vue-multi-select/dist/lib/vue-multi-select.css';
 import { mapState, mapActions } from 'vuex';
 import axios from "axios";
 export default {
   name: "Managers",
   components:{
-
+    vueMultiSelect
   },
 
   data:() => ({
 
     errorMessage:null,
+    managers:null,
     callCenters:null,
+    Selected:null,
     agent:{
       name:'',
       email:'',
-      latitude:'',
-      longitude:'',
+      password:'',
+      confirmPassword:'',
       phoneNumber:'',
       address:'',
-    },
-    block:{
-      name:'',
-      capacity:''
     },
     submitted: false,
     submitted2: false,
@@ -364,58 +302,68 @@ export default {
     editActive: false,
     edit: null,
     editProp: {},
-    search: '',
+    search2: 'Search things',
+    search:'',
     search1:'',
+    btnLabel: values => `Selected Call Center (${values.length})`,
     allCheck: false,
     allCheck1: false,
     page: 1,
     max: 5,
     active: 0,
     active2:0,
-    selected: null,
+    selected: [],
     selected1: null,
 
+    filters: [{
+      nameAll: 'select <= 5',
+      nameNotAll: 'Deselect <= 5',
+      func(elem) {
+        return elem.name <= 5;
+      },
+    }, {
+      nameAll: 'Select contains 2',
+      nameNotAll: 'Deselect contains 2',
+      func(elem) {
+        return elem.name.indexOf('2') !== -1;
+      },
+    }],
+    options: {
+      multi: false,
+    },
   }),
   created(){
     const token = window.localStorage.getItem('token');
     const config = {
       headers: { Authorization: `Bearer ${token}` }
     };
-    axios.get('http://localhost:4002/GetCallCenters', config).then(res =>{
-      console.log(res.data)
-      this.callCenters =res.data
+    axios.get('http://localhost:4002/managers', config).then(res =>{
+
+      this.managers =res.data.managers
+      this.callCenters= res.data.callCenters;
+      console.log(this.callCenters)
     }).catch(err => console.log(err))
   },
   methods:{
     ...mapActions('manager', ['hospitalsSet']),
-    storeBlock(){
-
-      console.log('submit2!')
-      this.submitted2 = true;
-      console.log(this.selected)
-      // const config = {
-      //   headers: { Authorization: `Bearer ${token}` },
-      //   body:{name:this.block.name,capacity:this.block.capacity,hospitalID:id}
-      // };
-      // console.log(config)
-      // stop here if form is invalid
-      // this.$v.$touch();
-      // if (this.$v.$invalid) {
-      //   return;
-      // }
+    hospitalsStore(hospitals){
+      this.hospitalsSet(hospitals)
+    },
+    remove(){
+       console.log(this.selected)
       const token = window.localStorage.getItem('token');
       const config = {
         headers: { Authorization: `Bearer ${token}` },
-        body:{name:this.block.name,capacity:this.block.capacity,hospitalID:this.selected._id}
+        body:this.selected
       };
-      // console.log(config)
-      axios.post('http://localhost:4002/Blocks/Store', config).then(res =>{
+      console.log(config)
+      axios.post('http://localhost:4002/delete/managers', config).then(res =>{
         this.$vs.notification({
           progress: 'auto',
-          color:'success',
+          color:'danger',
           position:'top-right',
-          title: 'Call center',
-          text: `Block created successfully`
+          title: 'Admin',
+          text: `Managers deleted successfully`
         })
         console.log(res)
         setTimeout(function (){
@@ -429,9 +377,7 @@ export default {
               this.errorMessage =err.response.data
             }
           })
-    },
-    hospitalsStore(hospitals){
-      this.hospitalsSet(hospitals)
+
     },
     submit() {
       console.log('submit!')
@@ -445,16 +391,16 @@ export default {
       const token = window.localStorage.getItem('token');
       const config = {
         headers: { Authorization: `Bearer ${token}` },
-        body:{name:this.agent.name,email:this.agent.email,latitude:this.agent.latitude,longitude:this.agent.longitude,phoneNumber:this.agent.phoneNumber,address:this.agent.address}
+        body:{name:this.agent.name,email:this.agent.email,callCenterID:this.Selected[0]._id,password:this.agent.password,phoneNumber:this.agent.phoneNumber,address:this.agent.address}
       };
-
-      axios.post('http://localhost:4002/Hospitals/Store', config).then(res =>{
+     console.log(config)
+      axios.post('http://localhost:4002/register/manager', config).then(res =>{
         this.$vs.notification({
           progress: 'auto',
           color:'success',
           position:'top-right',
-          title: 'Call center',
-          text: `Hospital created successfully`
+          title: 'Admin',
+          text: `Manager created successfully`
         })
         console.log(res)
         setTimeout(function (){
@@ -472,15 +418,7 @@ export default {
     },
   },
   validations: {
-    block:{
-      name:{
-        required,
-        minLength: minLength(4)
-      },
-      capacity:{
-        required
-      }
-    },
+
     agent:{
       name: {
         required,
@@ -493,16 +431,18 @@ export default {
       email: {
         required,email
       },
-      latitude: {
-        required
-      },
       address:{
         required,
         minLength: minLength(4)
       },
-      longitude: {
+      password: {
         required,
-
+        minLength: minLength(8)
+      },
+      confirmPassword: {
+        required,
+        minLength: minLength(8),
+        sameAsPassword: sameAs('password')
       },
     }
   },
