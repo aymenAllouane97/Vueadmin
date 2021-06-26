@@ -138,9 +138,9 @@ export default {
       this.getRoleUser(res.data.role)
       console.log(res.data.role)
     }).catch(err => {console.log(err)
-      // window.localStorage.removeItem('token');
-      // window.localStorage.removeItem('role');
-      // this.$router.push('/login');
+      window.localStorage.removeItem('token');
+      window.localStorage.removeItem('role');
+      this.$router.push('/login');
     })
   }
 
