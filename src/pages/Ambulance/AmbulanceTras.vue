@@ -130,6 +130,7 @@ export default {
     }
   }
   ,async created(){
+
     const token = window.localStorage.getItem('token');
     const config = {
       headers: { Authorization: `Bearer ${token}` }
@@ -137,11 +138,26 @@ export default {
    await axios.get('http://localhost:4002/ambulances', config).then(res =>{
       console.log(res.data)
       this.items =res.data
-      this.hospitalsStore(res.data)
+
       this.dataShow=true;
+
+
     }).catch(err => console.log(err))
+    setInterval( async () => this.callBack(), 120000);
   },
   methods: {
+    async callBack(){
+      const token = window.localStorage.getItem('token');
+      const config = {
+        headers: { Authorization: `Bearer ${token}` }
+      };
+      await axios.get('http://localhost:4002/ambulances', config).then(res =>{
+        console.log(res.data)
+        this.items =res.data
+        console.log(new Date())
+        this.dataShow=true;
+      }).catch(err => console.log(err))
+    },
     forceRerender () {
       // remove the my-component component from the DOM
       this.renderComponent = false;

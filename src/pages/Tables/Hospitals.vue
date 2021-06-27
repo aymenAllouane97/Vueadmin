@@ -19,6 +19,14 @@
         >
           <i class='fa fa-plus mr-1' ></i> Add Service
         </vs-button>
+        <vs-button
+            v-if="selected"
+            @click="active4=!active4"
+            primary
+            flat
+        >
+          <i class='fa fa-pencil-square mr-1' ></i> Edit Hospital
+        </vs-button>
         <vs-dialog v-model="active2">
           <template #header>
             <h4 class="not-margin">
@@ -75,6 +83,68 @@
                 <vs-col offset="2" w="8">
                   <vs-button block @click="storeBlock( )">
                     <i class='fa fa-plus mr-1' ></i> Add
+                  </vs-button>
+                </vs-col>
+              </vs-row>
+            </div>
+          </template>
+        </vs-dialog>
+        <vs-dialog v-model="active3">
+          <template #header>
+            <h4 class="not-margin">
+              Edit  <b>Service</b>
+            </h4>
+          </template>
+          <form  >
+            <b-alert class="alert-sm" variant="danger" :show="!!errorMessage">
+              {{errorMessage}}
+            </b-alert>
+            <vs-row justify="center" v-if="selected1">
+              <vs-col  w="10">
+                <vs-input
+                    class="mb-2"
+                    danger-text="The name is required"
+                    placeholder="Name"
+                    val-icon-success="done"
+                    v-model="selected1.name"
+                    :class="{ 'form-control is-invalid': submitted2 && $v.block.name.$error }"
+                    border >
+                  <template #icon>
+                    <i class='fa fa-user'></i>
+                  </template>
+                </vs-input>
+                <div v-if="submitted2 && !$v.block.name.required" class="invalid-feedback">Name is required</div>
+                <div v-if="submitted2 && !$v.block.name.minLength" class="invalid-feedback">Name is must have 4 chars</div>
+              </vs-col>
+            </vs-row>
+            <vs-row justify="center" v-if="selected1">
+              <vs-col  w="10">
+                <vs-input
+                    class="mb-2"
+                    type="number"
+                    danger-text="The password does not meet the standards"
+                    placeholder="Capacity "
+                    val-icon-danger="clear"
+                    v-model="selected1.capacity"
+                    :class="{ 'form-control is-invalid': submitted2 && $v.block.capacity.$error }"
+                    border>
+                  <template #icon>
+                    <i class='fa fa-bar-chart'></i>
+                  </template>
+                </vs-input>
+                <div v-if="submitted2 && $v.block.capacity.$error" class="invalid-feedback">
+                  <span v-if="!$v.block.capacity.required"> Capacity is required</span>
+
+                </div>
+              </vs-col>
+            </vs-row>
+          </form>
+          <template #footer>
+            <div class="footer-dialog">
+              <vs-row>
+                <vs-col offset="2" w="8">
+                  <vs-button block @click="editBlock( )">
+                    <i class='fa fa-pencil-square mr-1' ></i> Edit
                   </vs-button>
                 </vs-col>
               </vs-row>
@@ -229,16 +299,165 @@
             </div>
           </template>
         </vs-dialog>
-        <vs-button border v-if="selected" danger>
+        <vs-dialog v-model="active4">
+          <template #header>
+            <h4 class="not-margin">
+              Edit  <b>Hospital</b>
+            </h4>
+          </template>
+          <form  >
+            <b-alert class="alert-sm" variant="danger" :show="!!errorMessage">
+              {{errorMessage}}
+            </b-alert>
+            <vs-row justify="center" v-if="selected">
+              <vs-col  w="10">
+                <vs-input
+                    class="mb-2"
+                    danger-text="The name is required"
+                    placeholder="Name"
+                    val-icon-success="done"
+                    v-model="selected.name"
+                    :class="{ 'form-control is-invalid': submitted && $v.agent.name.$error }"
+                    border >
+                  <template #icon>
+                    <i class='fa fa-user'></i>
+                  </template>
+                </vs-input>
+                <div v-if="submitted && !$v.agent.name.required" class="invalid-feedback">Name is required</div>
+              </vs-col>
+            </vs-row>
+            <vs-row justify="center" v-if="selected">
+              <vs-col w="10">
+                <vs-input
+                    type="email"
+                    class="mb-2"
+                    danger-text="The entered data could not be verified"
+                    placeholder="Email"
+                    val-icon-warning="warning"
+                    :class="{ 'form-control is-invalid': submitted && $v.agent.email.$error }"
+                    v-model="selected.email"
+                    border>
+                  <template #icon>
+                    <i class='fa fa-envelope'></i>
+                  </template>
+                </vs-input>
+                <div v-if="submitted && $v.agent.email.$error" class="invalid-feedback">
+                  <span v-if="!$v.agent.email.required">Email is required</span>
+                  <span v-if="!$v.agent.email.email">Email is invalid</span>
+                </div>
+              </vs-col>
+            </vs-row>
+            <vs-row justify="center" v-if="selected">
+              <vs-col  w="10">
+                <vs-input
+                    class="mb-2"
+                    type="number"
+                    danger-text="The password does not meet the standards"
+                    placeholder="Latitude "
+                    val-icon-danger="clear"
+                    v-model="selected.latitude"
+                    :class="{ 'form-control is-invalid': submitted && $v.agent.latitude.$error }"
+                    border>
+                  <template #icon>
+                    <i class='fa fa-map-marker'></i>
+                  </template>
+                </vs-input>
+                <div v-if="submitted && $v.agent.latitude.$error" class="invalid-feedback">
+                  <span v-if="!$v.agent.latitude.required"> Latitude is required</span>
+
+                </div>
+              </vs-col>
+            </vs-row>
+            <vs-row justify="center" v-if="selected">
+              <vs-col  w="10">
+                <vs-input
+                    class="mb-2"
+                    type="number"
+                    danger-text="The password does not meet the standards"
+                    placeholder=" longitude "
+                    val-icon-danger="clear"
+                    :class="{ 'form-control is-invalid': submitted && $v.agent.longitude.$error }"
+                    v-model="selected.longitude"
+                    border>
+                  <template #icon>
+                    <i class='fa fa-map-marker'></i>
+                  </template>
+                </vs-input>
+                <div v-if="submitted && $v.agent.longitude.$error" class="invalid-feedback">
+                  <span v-if="!$v.agent.longitude.required">Longitude is required</span>
+                </div>
+              </vs-col>
+            </vs-row>
+            <vs-row justify="center" v-if="selected">
+              <vs-col  w="10">
+                <vs-input
+                    class="mb-2"
+                    type="text"
+                    danger-text="The password does not meet the standards"
+                    placeholder=" Address  "
+                    val-icon-danger="clear"
+                    v-model="selected.address"
+                    :class="{ 'form-control is-invalid': submitted && $v.agent.address.$error }"
+                    border >
+                  <template #icon>
+                    <i class='fa fa-id-card'></i>
+                  </template>
+                </vs-input>
+                <div v-if="submitted && $v.agent.address.$error" class="invalid-feedback">
+                  <span v-if="!$v.agent.address.required"> Address is required</span>
+                  <span v-else-if="!$v.agent.address.minLength"> Address must 6 chars</span>
+                </div>
+              </vs-col>
+            </vs-row>
+
+            <vs-row justify="center" v-if="selected">
+              <vs-col  w="10">
+                <vs-input
+                    class="mb-2"
+                    danger-text="The password does not meet the standards"
+                    placeholder="Phone Number "
+                    val-icon-danger="clear"
+                    v-model="selected.phoneNumber"
+                    :class="{ 'form-control is-invalid': submitted && $v.agent.phoneNumber.$error }"
+                    border>
+                  <template #icon>
+                    <i class='fa fa-phone'></i>
+                  </template>
+                </vs-input>
+                <div v-if="submitted && $v.agent.phoneNumber.$error" class="invalid-feedback">
+                  <span v-if="!$v.agent.phoneNumber.required"> Phone number is required</span>
+                  <span v-else-if="!$v.agent.phoneNumber.minLength">Phone number must 8 chars</span>
+                </div>
+              </vs-col>
+            </vs-row>
+
+
+          </form>
+
+
+          <template #footer>
+            <div class="footer-dialog">
+              <vs-row>
+                <vs-col offset="2" w="8">
+                  <vs-button block @click="editHospital()">
+                    <i class='fa fa-pencil-square mr-1' ></i> Edit
+                  </vs-button>
+                </vs-col>
+              </vs-row>
+            </div>
+          </template>
+        </vs-dialog>
+        <vs-button border v-if="selected" @click="removeHospitals()" danger>
           Remove Hospital
         </vs-button>
         <vs-button  v-if="selected1"
                    primary
                    flat
+                    @click="active3=!active3"
         >
           <i class='fa fa-pencil-square mr-1' ></i>Edit Block
         </vs-button>
-        <vs-button border v-if="selected1" danger>
+        <vs-button border v-if="selected1" @click="removeBlock()" danger>
           Remove Block
         </vs-button>
       </vs-row>
@@ -379,6 +598,7 @@ export default {
 
     errorMessage:null,
     hospitals:null,
+    loading:null,
     agent:{
       name:'',
       email:'',
@@ -407,23 +627,133 @@ export default {
     max: 5,
     active: 0,
     active2:0,
+    active3:0,
+    active4:0,
     selected: null,
     selected1: null,
 
   }),
   created(){
+    this.loading = this.$vs.loading()
     const token = window.localStorage.getItem('token');
     const config = {
       headers: { Authorization: `Bearer ${token}` }
     };
     axios.get('http://localhost:4002/Hospitals', config).then(res =>{
-      console.log(res.data)
+      setTimeout(() => {
+        this.loading.close()
+      }, 200)
       this.hospitals =res.data
+
       this.hospitalsStore(res.data)
     }).catch(err => console.log(err))
   },
   methods:{
     ...mapActions('manager', ['hospitalsSet']),
+    removeBlock(){
+      axios.delete('http://localhost:4002/Blocks/delete/'+this.selected1._id).then(res =>{
+        this.$vs.notification({
+          progress: 'auto',
+          color:'danger',
+          position:'top-right',
+          title: 'Call center',
+          text: `Block deleted successfully`
+        })
+        console.log(res)
+        setTimeout(function (){
+          window.location.reload();
+        },3000)
+      })
+          .catch(err => {
+            console.log(err);
+            if(err.status = 404){
+
+              this.errorMessage =err.response.data
+            }
+          })
+    },
+    editBlock(){
+      const token = window.localStorage.getItem('token');
+      const config = {
+        headers: { Authorization: `Bearer ${token}` },
+        body:{name:this.selected1.name,capacity:this.selected1.capacity,_id:this.selected1._id}
+      };
+      // console.log(config)
+      axios.put('http://localhost:4002/Blocks/update', config).then(res =>{
+        this.$vs.notification({
+          progress: 'auto',
+          color:'success',
+          position:'top-right',
+          title: 'Call center',
+          text: `Block edit successfully`
+        })
+        console.log(res)
+        setTimeout(function (){
+          window.location.reload();
+        },3000)
+      })
+          .catch(err => {
+            console.log(err);
+            if(err.status = 404){
+
+              this.errorMessage =err.response.data
+            }
+          })
+    },
+    removeHospitals(){
+      const token = window.localStorage.getItem('token');
+      const config = {
+        headers: { Authorization: `Bearer ${token}` }
+      };
+      axios.delete('http://localhost:4002/Hospitals/delete/'+this.selected._id,config).then(res =>{
+        this.$vs.notification({
+          progress: 'auto',
+          color:'danger',
+          position:'top-right',
+          title: 'Call center',
+          text: `Hospitals deleted successfully`
+        })
+        console.log(res)
+        setTimeout(function (){
+          window.location.reload();
+        },3000)
+      })
+          .catch(err => {
+            console.log(err);
+            if(err.status = 404){
+
+              this.errorMessage =err.response.data
+            }
+          })
+    },
+    editHospital(){
+      const token = window.localStorage.getItem('token');
+      const config = {
+        headers: { Authorization: `Bearer ${token}` },
+        body:this.selected
+      };
+      // console.log(config)
+      axios.put('http://localhost:4002/Hospitals/update', config).then(res =>{
+        this.$vs.notification({
+          progress: 'auto',
+          color:'success',
+          position:'top-right',
+          title: 'Call center',
+          text: `Hospitals edit successfully`
+        })
+        console.log(res)
+        setTimeout(function (){
+          window.location.reload();
+        },3000)
+      })
+          .catch(err => {
+            console.log(err);
+            if(err.status = 404){
+
+              this.errorMessage =err.response.data
+            }
+          })
+    },
     storeBlock(){
 
       console.log('submit2!')

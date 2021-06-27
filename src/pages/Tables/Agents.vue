@@ -2,14 +2,26 @@
 <template>
   <div class="center shadow-lg ">
     <div class="center">
-      <vs-button
-          @click="active=!active"
-          success
-          flat
+      <vs-row>
+        <vs-button
+            @click="active=!active"
+            success
+            flat
 
-      >
-        <i class='fa fa-plus mr-1' ></i> Add
-      </vs-button>
+        >
+          <i class='fa fa-plus mr-1' ></i> Add
+        </vs-button>
+        <vs-button
+            @click="removeSelected()"
+            danger
+            flat
+            class="ml-2"
+            v-if="selected.length !=0"
+        >
+          Remove Selected
+        </vs-button>
+      </vs-row>
+
       <vs-dialog v-model="active">
         <template #header>
           <h4 class="not-margin">
@@ -194,10 +206,10 @@
           </vs-td>
           <vs-td>
             <vs-row>
-              <vs-button flat icon>
+              <vs-button flat icon @click="grant(tr)">
                 Grant to manager
               </vs-button>
-              <vs-button border danger>
+              <vs-button border danger @click="remove(tr)">
                 Remove User
               </vs-button>
             </vs-row>
@@ -290,6 +302,76 @@ export default {
     agentStore(agents){
      this.agentsSet(agents)
     },
+    grant(agent){
+      const token = window.localStorage.getItem('token');
+      const config = {
+        headers: { Authorization: `Bearer ${token}` },
+        body:agent
+      };
+      axios.post('http://localhost:4002/grant/agent', config).then(res =>{
+        this.$vs.notification({
+          progress: 'auto',
+          color:'success',
+          position:'top-right',
+          title: 'manager',
+          text: `agent granted successfully`
+        })
+        setTimeout(function (){
+          window.location.reload();
+        },3000)
+      })
+          .catch(err => {if(err.status = 404){
+            this.errorMessage =err.response.data
+          }
+          })
+
+    },
+    removeSelected(){
+      const token = window.localStorage.getItem('token');
+      const config = {
+        headers: { Authorization: `Bearer ${token}` },
+        body:this.selected
+      };
+      axios.post('http://localhost:4002/remove/agent', config).then(res =>{
+        this.$vs.notification({
+          progress: 'auto',
+          color:'danger',
+          position:'top-right',
+          title: 'manager',
+          text: `agents deleted successfully`
+        })
+        setTimeout(function (){
+          window.location.reload();
+        },3000)
+      })
+          .catch(err => {if(err.status = 404){
+            this.errorMessage =err.response.data
+          }
+          })
+    },
+    remove(agent){
+      const token = window.localStorage.getItem('token');
+      const config = {
+        headers: { Authorization: `Bearer ${token}` },
+        body:[agent]
+      };
+      axios.post('http://localhost:4002/remove/agent', config).then(res =>{
+        this.$vs.notification({
+          progress: 'auto',
+          color:'danger',
+          position:'top-right',
+          title: 'manager',
+          text: `agent deleted successfully`
+        })
+          setTimeout(function (){
+            window.location.reload();
+          },3000)
+      })
+          .catch(err => {if(err.status = 404){
+            this.errorMessage =err.response.data
+          }
+          })
+    },
     submit() {
       console.log('submit!')
       this.submitted = true;
@@ -310,7 +392,7 @@ export default {
           progress: 'auto',
           color:'success',
           position:'top-right',
-          title: 'agent',
+          title: 'manager',
           text: `agent created successfully`
         })
        setTimeout(function (){
